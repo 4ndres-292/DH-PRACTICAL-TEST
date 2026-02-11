@@ -1,0 +1,67 @@
+import java.util.Scanner;
+import java.util.ArrayDeque;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int N = sc.nextInt();
+
+        int[] llegada = new int[N];
+        char[] tipo = new char[N];
+
+        for (int i = 0; i < N; i++) {
+            llegada[i] = sc.nextInt();
+            tipo[i] = sc.next().charAt(0);
+        }
+
+        ArrayDeque<Integer> V = new ArrayDeque<>();
+        ArrayDeque<Integer> J = new ArrayDeque<>();
+        ArrayDeque<Integer> C = new ArrayDeque<>();
+        ArrayDeque<Integer> S = new ArrayDeque<>();
+
+        int idx = 0;
+        int tiempo = 0;
+        int libre1 = 0;
+        int libre2 = 0;
+
+        while (idx < N || !V.isEmpty() || !J.isEmpty() || !C.isEmpty() || !S.isEmpty() || tiempo < libre1 || tiempo < libre2) {
+
+            while (idx < N && llegada[idx] == tiempo) {
+                if (tipo[idx] == 'V') V.add(llegada[idx]);
+                else if (tipo[idx] == 'J') J.add(llegada[idx]);
+                else if (tipo[idx] == 'C') C.add(llegada[idx]);
+                else S.add(llegada[idx]);
+                idx++;
+            }
+
+            if (tiempo >= libre1) {
+                if (!V.isEmpty()) {
+                    V.poll();
+                    libre1 = tiempo + 5;
+                } else if (!J.isEmpty()) {
+                    J.poll();
+                    libre1 = tiempo + 5;
+                } else if (!C.isEmpty()) {
+                    C.poll();
+                    libre1 = tiempo + 5;
+                } else if (!S.isEmpty() && tiempo - S.peek() >= 10) {
+                    S.poll();
+                    libre1 = tiempo + 5;
+                }
+            }
+
+            if (tiempo >= libre2) {
+                if (!S.isEmpty()) {
+                    S.poll();
+                    libre2 = tiempo + 2;
+                }
+            }
+
+            tiempo++;
+        }
+
+        int resultado = libre1 > libre2 ? libre1 : libre2;
+        System.out.println(resultado);
+    }
+}
