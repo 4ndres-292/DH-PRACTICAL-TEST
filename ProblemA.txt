@@ -1,0 +1,28 @@
+import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        long E = sc.nextLong();
+
+        long alturaMax = sc.nextLong();
+        long energiaUsada = 0;
+
+        for (int i = 1; i < n; i++) {
+            long h = sc.nextLong();
+            if (h > alturaMax) {
+                energiaUsada += h - alturaMax;
+            } else {
+                alturaMax = h;
+            }
+        }
+
+        if (energiaUsada <= E) {
+            System.out.print("Valida");
+        } else {
+            System.out.print("Invalida");
+        }
+    }
+}
