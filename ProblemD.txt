@@ -1,0 +1,63 @@
+import java.util.Scanner;
+import java.util.HashMap;
+import java.util.HashSet;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int N = sc.nextInt();
+
+        long total = 0;
+
+        HashMap<String, Long> rutaMonto = new HashMap<>();
+        HashMap<String, Long> vehiculoMonto = new HashMap<>();
+        HashMap<String, HashSet<String>> vehiculoRutas = new HashMap<>();
+
+        for (int i = 0; i < N; i++) {
+            String ruta = sc.next();
+            String placa = sc.next();
+            long monto = sc.nextLong();
+
+            total += monto;
+
+            rutaMonto.put(ruta, rutaMonto.getOrDefault(ruta, 0L) + monto);
+            vehiculoMonto.put(placa, vehiculoMonto.getOrDefault(placa, 0L) + monto);
+
+            vehiculoRutas.putIfAbsent(placa, new HashSet<String>());
+            vehiculoRutas.get(placa).add(ruta);
+        }
+
+        String rutaMax = "";
+        long maxRutaMonto = -1;
+        for (String r : rutaMonto.keySet()) {
+            long m = rutaMonto.get(r);
+            if (m > maxRutaMonto) {
+                maxRutaMonto = m;
+                rutaMax = r;
+            }
+        }
+
+        int vehiculosMultiRuta = 0;
+        for (HashSet<String> rutas : vehiculoRutas.values()) {
+            if (rutas.size() > 1) {
+                vehiculosMultiRuta++;
+            }
+        }
+
+        String vehiculoMax = "";
+        long maxVehiculoMonto = -1;
+        for (String v : vehiculoMonto.keySet()) {
+            long m = vehiculoMonto.get(v);
+            if (m > maxVehiculoMonto) {
+                maxVehiculoMonto = m;
+                vehiculoMax = v;
+            }
+        }
+
+        System.out.println(total);
+        System.out.println(rutaMax);
+        System.out.println(vehiculosMultiRuta);
+        System.out.print(vehiculoMax);
+    }
+}
