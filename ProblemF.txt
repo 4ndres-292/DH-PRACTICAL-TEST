@@ -1,0 +1,53 @@
+import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int N = sc.nextInt();
+        sc.nextLine();
+
+        int mejorRacha = 0;
+        int mejorIndice = -1;
+
+        for (int i = 1; i <= N; i++) {
+            String linea = sc.nextLine().trim();
+            if (linea.isEmpty()) continue;
+
+            String[] nums = linea.split(" ");
+            int rachaActual = 0;
+            int rachaMax = 0;
+
+            for (String s : nums) {
+                int v = Integer.parseInt(s);
+                boolean primo = v > 1;
+                if (primo) {
+                    for (int d = 2; d * d <= v; d++) {
+                        if (v % d == 0) {
+                            primo = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (primo) {
+                    rachaActual++;
+                    if (rachaActual > rachaMax) rachaMax = rachaActual;
+                } else {
+                    rachaActual = 0;
+                }
+            }
+
+            if (rachaMax > mejorRacha || (rachaMax == mejorRacha && rachaMax > 0)) {
+                mejorRacha = rachaMax;
+                mejorIndice = i;
+            }
+        }
+
+        if (mejorRacha == 0) {
+            System.out.print("pipipi");
+        } else {
+            System.out.print("p" + mejorIndice);
+        }
+    }
+}
