@@ -1,0 +1,67 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int N = sc.nextInt();
+        int Q = sc.nextInt();
+
+        ArrayList<Integer>[] g = new ArrayList[N + 1];
+        for (int i = 1; i <= N; i++) g[i] = new ArrayList<>();
+
+        for (int qi = 0; qi < Q; qi++) {
+            char op = sc.next().charAt(0);
+
+            if (op == 'A') {
+                int a = sc.nextInt();
+                int b = sc.nextInt();
+                if (!g[a].contains(b)) g[a].add(b);
+
+            } else if (op == 'R') {
+                int a = sc.nextInt();
+                int b = sc.nextInt();
+                g[a].remove((Integer) b);
+
+            } else {
+                int start = sc.nextInt();
+
+                boolean[] visitado = new boolean[N + 1];
+                boolean[] enPila = new boolean[N + 1];
+                int[] pila = new int[N + 1];
+                int[] idx = new int[N + 1];
+
+                int top = 0;
+                pila[top++] = start;
+                boolean hayCiclo = false;
+                int count = 0;
+
+                while (top > 0 && !hayCiclo) {
+                    int u = pila[top - 1];
+
+                    if (!visitado[u]) {
+                        visitado[u] = true;
+                        enPila[u] = true;
+                        count++;
+                    }
+
+                    if (idx[u] < g[u].size()) {
+                        int v = g[u].get(idx[u]++);
+                        if (!visitado[v]) {
+                            pila[top++] = v;
+                        } else if (enPila[v]) {
+                            hayCiclo = true;
+                        }
+                    } else {
+                        enPila[u] = false;
+                        top--;
+                    }
+                }
+
+                if (hayCiclo) System.out.println(-1);
+                else System.out.println(count);
+            }
+        }
+    }
+}
